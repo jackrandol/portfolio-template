@@ -1,0 +1,20 @@
+{
+  "name": "portfolio-template",
+  "version": "1.0.0",
+  "description": "template for making artist website with admin page to update projects",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server",
+    "server": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackrandol/portfolio-template.git"
+  },
+  "author": "Jack Randol",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jackrandol/portfolio-template/issues"
+  },
+  "homepage": "https://github.com/jackrandol/portfolio-template#readme"
+}
