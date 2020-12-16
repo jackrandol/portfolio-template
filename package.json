@@ -22,13 +22,11 @@
     "config": "^3.3.3",
     "express": "^4.17.1",
     "express-validator": "^6.8.0",
-    "expressjs": "^1.0.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.8"
   },
   "devDependencies": {
-    "eslint": "^7.15.0",
-    "eslint-plugin-react": "^7.21.5",
+    "concurrently": "^5.3.0",
     "nodemon": "^2.0.6"
   }
 }
