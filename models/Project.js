@@ -21,7 +21,7 @@ const ProjectSchema = new mongoose.Schema({
       url: { type: String, require: true },
     },
   ],
-  externalUrl: { type: String, required: false },
+  externalUrl: { type: [String], required: false },
 });
 
 module.exports = mongoose.model('project', ProjectSchema);

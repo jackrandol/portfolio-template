@@ -9,9 +9,7 @@ const { check, validationResult } = require('express-validator');
 // @access Public
 router.get('/:id', async (req, res) => {
   try {
-    const project = await (
-      await Project.findOne({ id: req.params.id })
-    ).populate('project', ['title', 'description', 'date']);
+    const project = await Project.findOne({ id: req.params.id });
 
     if (!project) {
       return res.status(400).json({ msg: 'There is no project here' });
@@ -45,12 +43,40 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { title, description, date } = req.body;
 
-    const projFields = {};
+    //build profile object
+    const { title, description, date, images, externalUrl } = req.body;
+
+    const projectFields = { title, description, date };
 
     projectFields.user = req.user.id;
-    res.send('great work');
+    if (images) projectFields.images = images;
+    if (externalUrl)
+      projectFields.externalUrl = externalUrl
+        .split(',')
+        .map((url) => url.trim());
+
+    try {
+      //find project - if project already exists then update it with the new fields
+      let project = await Project.findOne({ user: req.user.id });
+      if (project) {
+        project = await Project.findOneAndUpdate(
+          { user: req.user.id },
+          { $set: projectFields },
+          { new: true, useFindAndModify: false }
+        );
+
+        return res.json(project);
+      }
+      // Create
+      project = new Project(projectFields);
+
+      await project.save();
+      return res.json(project);
+    } catch (err) {
+      console.error(err.message);
+      return res.status(500).send('Server Error');
+    }
   }
 );
 
