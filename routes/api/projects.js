@@ -9,7 +9,7 @@ const { check, validationResult } = require('express-validator');
 // @access Public
 router.get('/:id', async (req, res) => {
   try {
-    const project = await Project.findOne({ id: req.params.id });
+    const project = await Project.findOne({ _id: req.params.id });
 
     if (!project) {
       return res.status(400).json({ msg: 'There is no project here' });
@@ -18,9 +18,26 @@ router.get('/:id', async (req, res) => {
     res.json(project);
   } catch (err) {
     console.error(err.message);
+    if (err.kind == 'ObjectId') {
+      return res.status(400).json({ msg: 'There is no project here' });
+    }
     res.status(500).send('Server Error');
   }
   res.send('projects route');
+});
+
+// @route GET api/projects
+// @desc Test get all projects
+// @access Public
+
+router.get('/', async (req, res) => {
+  try {
+    const projects = await Project.find();
+    res.json(projects);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Service Error');
+  }
 });
 
 // @route POST api/projects
@@ -49,7 +66,6 @@ router.post(
 
     const projectFields = { title, description, date };
 
-    projectFields.user = req.user.id;
     if (images) projectFields.images = images;
     if (externalUrl)
       projectFields.externalUrl = externalUrl
@@ -63,7 +79,7 @@ router.post(
         project = await Project.findOneAndUpdate(
           { user: req.user.id },
           { $set: projectFields },
-          { new: true, useFindAndModify: false }
+          { new: true }
         );
 
         return res.json(project);
@@ -79,5 +95,20 @@ router.post(
     }
   }
 );
+
+// @route DELETE api/projects
+// @desc Delete a project
+// @access Private
+
+router.delete('/:id', auth, async (req, res) => {
+  //remove project
+  try {
+    await Project.findOneAndRemove({ _id: req.params.id });
+    res.json({ msg: 'Project deleted' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Service Error');
+  }
+});
 
 module.exports = router;
