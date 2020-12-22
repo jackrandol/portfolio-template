@@ -62,15 +62,12 @@ router.post(
     }
 
     //build profile object
-    const { title, description, date, images, externalUrl } = req.body;
+    const { title, description, date, images, links } = req.body;
 
     const projectFields = { title, description, date };
 
     if (images) projectFields.images = images;
-    if (externalUrl)
-      projectFields.externalUrl = externalUrl
-        .split(',')
-        .map((url) => url.trim());
+    if (links) projectFields.links = links;
 
     try {
       //find project - if project already exists then update it with the new fields

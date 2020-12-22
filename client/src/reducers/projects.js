@@ -31,9 +31,10 @@ export default function (state = initialState, action) {
     //     loading: false,
     //   };
     case ADD_PROJECT:
+      console.log(action.payload);
       return {
         ...state,
-        eventList: [...state.eventList, action.payload],
+        projects: [...state.projects, action.payload],
         loading: false,
       };
     case PROJECTS_LOADING:
@@ -49,8 +50,8 @@ export default function (state = initialState, action) {
     case UPDATE_PROJECT:
       return {
         ...state,
-        eventList: state.eventList.map((event) =>
-          event._id === action.payload._id ? action.payload : event
+        projects: state.projects.projects.map((project) =>
+          project._id === action.payload._id ? action.payload : project
         ),
         loading: false,
       };

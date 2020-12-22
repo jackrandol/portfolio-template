@@ -17,7 +17,12 @@ const ProjectSchema = new mongoose.Schema({
       url: { type: String, require: true },
     },
   ],
-  links: { type: [String], required: false },
+  links: [
+    {
+      id: { type: String, required: false },
+      link: { type: String, required: false },
+    },
+  ],
 });
 
 module.exports = mongoose.model('project', ProjectSchema);

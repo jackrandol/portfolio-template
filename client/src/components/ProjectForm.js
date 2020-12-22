@@ -71,7 +71,7 @@ const ProjectForm = ({ project }) => {
       title: state.title,
       description: state.description,
       date: state.date,
-      links,
+      links: links,
     };
     console.log('formData', formData);
     dispatch(addProject(formData));

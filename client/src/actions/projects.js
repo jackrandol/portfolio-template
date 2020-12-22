@@ -36,7 +36,7 @@ export const addProject = (project) => async (dispatch) => {
     axios.post('/api/projects', project).then((res) =>
       dispatch({
         type: ADD_PROJECT,
-        payload: res.data.project,
+        payload: res.data,
       })
     );
   } catch (error) {
