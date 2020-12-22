@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
 const ProjectSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
-  },
   title: {
     type: String,
     required: true,
@@ -21,7 +17,7 @@ const ProjectSchema = new mongoose.Schema({
       url: { type: String, require: true },
     },
   ],
-  externalUrl: { type: [String], required: false },
+  links: { type: [String], required: false },
 });
 
 module.exports = mongoose.model('project', ProjectSchema);
