@@ -2,3 +2,9 @@ form {
   display: flex;
   flex-direction: column;
 }
+
+.alert {
+  color: red;
+  font-weight: bold;
+  font-style: italic;
+}
