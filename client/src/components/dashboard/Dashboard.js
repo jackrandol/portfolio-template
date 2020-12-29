@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ProjectForm from '../ProjectForm';
+import PhotoUpload from '../PhotoUpload';
 
 function Dashboard() {
   const [projectFormVisible, setProjectFormVisible] = useState(false);
@@ -18,6 +19,7 @@ function Dashboard() {
           <ProjectForm />
         </div>
       )}
+      <PhotoUpload />
     </div>
   );
 }

@@ -21,6 +21,21 @@ function Projects(state) {
             <h1>{project.title}</h1>
             <p>{project.description}</p>
             <p>{convertISODate(project.date)}</p>
+            <div className='linkList'>
+              Links:
+              {project.links &&
+                project.links.map((link) => (
+                  <li key={link._id}>
+                    <a
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      href={link.link}
+                    >
+                      {link.link}
+                    </a>
+                  </li>
+                ))}
+            </div>
           </div>
         ))}
     </div>

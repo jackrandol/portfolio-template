@@ -3,6 +3,7 @@ const router = express.Router();
 const Project = require('../../models/Project');
 const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
+const { cloudinary } = require('../../utils/cloudinary');
 
 // @route GET api/projects/id
 // @desc Test get specific project
@@ -105,6 +106,25 @@ router.delete('/:id', auth, async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Service Error');
+  }
+});
+
+// @route DELETE api/projects/upload
+// @desc upload photo to cloudinary
+// @access Private
+
+router.post('/upload', async (req, res) => {
+  try {
+    const fileString = req.body.data;
+    const uploadedResponse = await cloudinary.uploader.upload(fileString, {
+      upload_preset: 'portfolio_dev',
+    });
+
+    console.log(uploadedResponse);
+    res.json({ msg: 'YAYYYY' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ err: 'something went wrong' });
   }
 });
 
