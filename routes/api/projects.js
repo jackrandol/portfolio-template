@@ -111,20 +111,19 @@ router.delete('/:id', auth, async (req, res) => {
 
 // @route DELETE api/projects/upload
 // @desc upload photo to cloudinary
-// @access Private
+// @access Private, w/o x-auth-token because cloudinary will reject the req with that header
 
-router.post('/upload', async (req, res) => {
+router.post('/imageUpload', async (req, res) => {
   try {
-    const fileString = req.body.data;
-    const uploadedResponse = await cloudinary.uploader.upload(fileString, {
+    const file = req.body.data;
+    const uploadResponse = await cloudinary.uploader.upload(file, {
       upload_preset: 'portfolio_dev',
     });
-
-    console.log(uploadedResponse);
-    res.json({ msg: 'YAYYYY' });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ err: 'something went wrong' });
+    console.log(uploadResponse);
+    res.status(200).json({ url: uploadResponse.secure_url });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ err: 'Something went wrong' });
   }
 });
 

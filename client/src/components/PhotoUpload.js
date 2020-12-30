@@ -6,8 +6,9 @@ function PhotoUpload() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewSource, setPreviewSource] = useState();
   const [filename, setFileName] = useState('Choose file');
-  const [uploadedFile, setUploadedFile] = useState({});
+  const [uploadedFileUrl, setUploadedFileUrl] = useState(null);
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -27,11 +28,14 @@ function PhotoUpload() {
   const uploadImage = async (base64EncodedImage) => {
     try {
       delete axios.defaults.headers.common['x-auth-token'];
-      await fetch('/api/photos', {
+      const res = await fetch('/api/projects/imageUpload', {
         method: 'POST',
         body: JSON.stringify({ data: base64EncodedImage }),
         headers: { 'Content-Type': 'application/json' },
       });
+      const data = await res.json();
+      setUploadedFileUrl(data.url);
+      setMessage('File successfully uploaded!');
     } catch (error) {
       console.log(error);
     }
@@ -39,13 +43,20 @@ function PhotoUpload() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!selectedFile) return;
+    if (!selectedFile || selectedFile.size >= 4 * 1024 * 1024) {
+      setMessage('File is larger than 4mb or there is no file selected');
+      return;
+    }
     const reader = new FileReader();
     reader.readAsDataURL(selectedFile);
     reader.onloadend = () => {
+      setLoading(true);
+
       uploadImage(reader.result);
     };
     reader.onerror = () => {
+      setLoading(false);
+      setMessage('something went wrong with your file upload');
       console.error('AHHHHHHHH!! error');
     };
   };
@@ -54,6 +65,8 @@ function PhotoUpload() {
     <div>
       <form onSubmit={handleSubmit}>
         Photo Uploader
+        {loading && <div>Image is Uploading . . . </div>}
+        {message && <div>{message}</div>}
         <input
           accept='.jpg,.jpeg,.png,.gif,.tiff,.tif'
           name='image'
@@ -64,14 +77,9 @@ function PhotoUpload() {
         <label htmlFor='customFile'>{filename}</label>
         <button type='submit'>Upload Image</button>
       </form>
-      {uploadedFile ? (
+      {uploadedFileUrl ? (
         <div>
-          <p>{uploadedFile.fileName}</p>
-          <img
-            className='photoPreview'
-            src={uploadedFile.filePath}
-            alt={uploadedFile.fileName}
-          />
+          <img className='photoPreview' src={uploadedFileUrl} alt='url' />
         </div>
       ) : null}
       {previewSource && (
