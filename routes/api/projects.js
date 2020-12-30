@@ -63,7 +63,7 @@ router.post(
     }
 
     //build profile object
-    const { title, description, date, images, links } = req.body;
+    const { id, title, description, date, images, links } = req.body;
 
     const projectFields = { title, description, date };
 
@@ -72,14 +72,15 @@ router.post(
 
     try {
       //find project - if project already exists then update it with the new fields
-      let project = await Project.findOne({ user: req.user.id });
+      let project = await Project.findOne({ id: id });
+
       if (project) {
         project = await Project.findOneAndUpdate(
-          { user: req.user.id },
+          { id: id },
           { $set: projectFields },
           { new: true }
         );
-
+        console.log('project vals', project);
         return res.json(project);
       }
       // Create

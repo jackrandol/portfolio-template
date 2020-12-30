@@ -56,10 +56,10 @@ export const deleteProject = (id) => (dispatch) => {
 
 export const updateProject = (project) => (dispatch) => {
   dispatch(setProjectsLoading());
-  axios.put(`/api/projects/`, project).then((res) =>
+  axios.post(`/api/projects/`, project).then((res) =>
     dispatch({
       type: UPDATE_PROJECT,
-      payload: res.data.project,
+      payload: res.data,
     })
   );
 };

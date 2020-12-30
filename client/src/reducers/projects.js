@@ -22,14 +22,14 @@ export default function (state = initialState, action) {
         projects: action.payload,
         loading: false,
       };
-    // case DELETE_PROJECT:
-    //   return {
-    //     ...state,
-    //     projects: state.projects.filter(
-    //       (project) => project._id !== action.payload
-    //     ),
-    //     loading: false,
-    //   };
+    case DELETE_PROJECT:
+      return {
+        ...state,
+        projects: state.projects.filter(
+          (project) => project._id !== action.payload
+        ),
+        loading: false,
+      };
     case ADD_PROJECT:
       console.log(action.payload);
       return {
@@ -50,8 +50,8 @@ export default function (state = initialState, action) {
     case UPDATE_PROJECT:
       return {
         ...state,
-        projects: state.projects.projects.map((project) =>
-          project._id === action.payload._id ? action.payload : project
+        projects: state.projects.map((project) =>
+          project._id === action.payload.id ? action.payload : project
         ),
         loading: false,
       };

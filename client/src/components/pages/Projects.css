@@ -1,5 +1,9 @@
 .projectCard {
   border: 1px rebeccapurple solid;
   padding: 10px;
-  width: 200px;
+  overflow: scroll;
+}
+
+.projectImage {
+  width: 180px;
 }

@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { convertISODate } from '../utils/Utils';
 import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
-import { addProject, setProjectsLoading } from '../actions/projects';
+import {
+  addProject,
+  setProjectsLoading,
+  updateProject,
+} from '../actions/projects';
 import './ProjectForm.css';
 import PhotoUpload from './PhotoUpload';
 
@@ -20,13 +24,15 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
     if (project) {
       setState({
         ...state,
+        id: project._id,
         title: project.title,
         description: project.description,
-        date: project.date,
+        date: convertISODate(project.date),
       });
       setLinks(project.links);
+      setImageUrls(project.images);
     }
-  }, [project]);
+  }, []);
 
   const [links, setLinks] = useState([{ id: '1', link: '' }]);
 
@@ -78,6 +84,7 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
   const onSubmit = (e) => {
     e.preventDefault();
     let formData = {
+      id: state.id,
       title: state.title,
       description: state.description,
       date: state.date,
@@ -85,7 +92,11 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
       images: imageUrls,
     };
     console.log('formData', formData);
-    dispatch(addProject(formData));
+    if (project) {
+      dispatch(updateProject(formData));
+    } else {
+      dispatch(addProject(formData));
+    }
   };
 
   return (
