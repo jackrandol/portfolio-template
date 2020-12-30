@@ -2,10 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { convertISODate } from '../utils/Utils';
 import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
-import { addProject } from '../actions/projects';
+import { addProject, setProjectsLoading } from '../actions/projects';
+import './ProjectForm.css';
+import PhotoUpload from './PhotoUpload';
 
-const ProjectForm = ({ project }) => {
+const ProjectForm = ({ toggleProjectForm, project }) => {
   let dispatch = useDispatch();
+  const [imageUrls, setImageUrls] = useState([]);
+
   const [state, setState] = useState({
     title: '',
     description: '',
@@ -22,7 +26,7 @@ const ProjectForm = ({ project }) => {
       });
       setLinks(project.links);
     }
-  });
+  }, [project]);
 
   const [links, setLinks] = useState([{ id: '1', link: '' }]);
 
@@ -65,6 +69,12 @@ const ProjectForm = ({ project }) => {
     setLinks(updatedLinks);
   };
 
+  const handleImageUrls = (url, fileName, id) => {
+    let newImageUrlsArray = [...imageUrls, { id, url, fileName }];
+    setImageUrls(newImageUrlsArray);
+    console.log(newImageUrlsArray);
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
     let formData = {
@@ -72,13 +82,15 @@ const ProjectForm = ({ project }) => {
       description: state.description,
       date: state.date,
       links: links,
+      images: imageUrls,
     };
     console.log('formData', formData);
     dispatch(addProject(formData));
   };
 
   return (
-    <div>
+    <div className='projectForm'>
+      <button onClick={toggleProjectForm}>X</button>
       <form onSubmit={(e) => onSubmit(e)}>
         <input
           type='text'
@@ -100,11 +112,25 @@ const ProjectForm = ({ project }) => {
           placeholder='description'
           onChange={handleChange}
         ></input>
+        {imageUrls && (
+          <div>
+            <div>Uploaded Images</div>
+            {imageUrls.map((image) => (
+              <img
+                key={image.id}
+                className='photoPreview'
+                src={image.url}
+                alt={image.fileName}
+              />
+            ))}
+          </div>
+        )}
+        <PhotoUpload handleImageUrls={handleImageUrls} />
         <ul>
           {links &&
             links.map((link) => (
               <li key={link.id}>
-                <label for='link'>
+                <label htmlFor='link'>
                   external project link: (must begin with http or https)
                 </label>
                 <input

@@ -13,7 +13,7 @@ const ProjectSchema = new mongoose.Schema({
   images: [
     {
       id: { type: String, required: true },
-      title: { type: String, required: true },
+      fileName: { type: String, required: true },
       url: { type: String, require: true },
     },
   ],

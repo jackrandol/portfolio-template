@@ -120,7 +120,9 @@ router.post('/imageUpload', async (req, res) => {
       upload_preset: 'portfolio_dev',
     });
     console.log(uploadResponse);
-    res.status(200).json({ url: uploadResponse.secure_url });
+    res
+      .status(200)
+      .json({ url: uploadResponse.secure_url, id: uploadResponse.public_id });
   } catch (err) {
     console.error(err);
     res.status(500).json({ err: 'Something went wrong' });

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './PhotoUpload.css';
 
-function PhotoUpload() {
+function PhotoUpload({ handleImageUrls }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewSource, setPreviewSource] = useState();
-  const [filename, setFileName] = useState('Choose file');
+  const [fileName, setFileName] = useState('Choose file');
   const [uploadedFileUrl, setUploadedFileUrl] = useState(null);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -27,7 +27,8 @@ function PhotoUpload() {
 
   const uploadImage = async (base64EncodedImage) => {
     try {
-      delete axios.defaults.headers.common['x-auth-token'];
+      var instance = axios.create();
+      delete instance.defaults.headers.common['x-auth-token'];
       const res = await fetch('/api/projects/imageUpload', {
         method: 'POST',
         body: JSON.stringify({ data: base64EncodedImage }),
@@ -35,6 +36,7 @@ function PhotoUpload() {
       });
       const data = await res.json();
       setUploadedFileUrl(data.url);
+      handleImageUrls(data.url, fileName, data.id);
       setMessage('File successfully uploaded!');
     } catch (error) {
       console.log(error);
@@ -63,7 +65,7 @@ function PhotoUpload() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <div>
         Photo Uploader
         {loading && <div>Image is Uploading . . . </div>}
         {message && <div>{message}</div>}
@@ -74,12 +76,12 @@ function PhotoUpload() {
           id='customeFile'
           onChange={handleFileChange}
         />
-        <label htmlFor='customFile'>{filename}</label>
-        <button type='submit'>Upload Image</button>
-      </form>
+        <label htmlFor='customFile'>{fileName}</label>
+        <button onClick={handleSubmit}>Upload Image</button>
+      </div>
       {uploadedFileUrl ? (
         <div>
-          <img className='photoPreview' src={uploadedFileUrl} alt='url' />
+          <img className='photoPreview' src={uploadedFileUrl} alt={fileName} />
         </div>
       ) : null}
       {previewSource && (

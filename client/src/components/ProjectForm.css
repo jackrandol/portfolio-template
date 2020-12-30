@@ -1,0 +1,9 @@
+.projectForm {
+  width: 500px;
+  height: 600px;
+  overflow: scroll;
+  background-color: sandybrown;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}

@@ -1,29 +1,24 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import ProjectForm from '../ProjectForm';
-import PhotoUpload from '../PhotoUpload';
 
 function Dashboard() {
   const [projectFormVisible, setProjectFormVisible] = useState(false);
+
+  const toggleProjectForm = () => {
+    setProjectFormVisible(!projectFormVisible);
+  };
+
   return (
     <div>
       <h1>Dashboard</h1>
-      <button onClick={() => setProjectFormVisible(!projectFormVisible)}>
-        Add Project
-      </button>
+      <button onClick={toggleProjectForm}>Add Project</button>
       {projectFormVisible && (
         <div>
-          <button onClick={() => setProjectFormVisible(!projectFormVisible)}>
-            X
-          </button>
-          <ProjectForm />
+          <ProjectForm toggleProjectForm={toggleProjectForm} />
         </div>
       )}
-      <PhotoUpload />
     </div>
   );
 }
-
-Dashboard.propTypes = {};
 
 export default Dashboard;
