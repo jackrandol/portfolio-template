@@ -13,6 +13,7 @@ import PhotoUpload from './PhotoUpload';
 const ProjectForm = ({ toggleProjectForm, project }) => {
   let dispatch = useDispatch();
   const [imageUrls, setImageUrls] = useState([]);
+  const [error, setError] = useState('');
 
   const [state, setState] = useState({
     title: '',
@@ -78,31 +79,40 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
   const handleImageUrls = (url, fileName, id) => {
     let newImageUrlsArray = [...imageUrls, { id, url, fileName }];
     setImageUrls(newImageUrlsArray);
-    console.log(newImageUrlsArray);
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
+    if (state.title === '') {
+      setError('you have forgotten title or date');
+      return;
+    }
     let formData = {
-      id: state.id,
       title: state.title,
       description: state.description,
       date: state.date,
       links: links,
       images: imageUrls,
     };
-    console.log('formData', formData);
     if (project) {
+      formData._id = state.id;
       dispatch(updateProject(formData));
     } else {
+      console.log('formData from submit new proj', formData);
       dispatch(addProject(formData));
     }
   };
 
+  const closeForm = () => {
+    toggleProjectForm();
+    setError('');
+  };
+
   return (
     <div className='projectForm'>
-      <button onClick={toggleProjectForm}>X</button>
+      <button onClick={closeForm}>X</button>
       <form onSubmit={(e) => onSubmit(e)}>
+        {error && <h1>{error}</h1>}
         <input
           type='text'
           name='title'

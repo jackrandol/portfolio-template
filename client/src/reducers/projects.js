@@ -51,7 +51,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         projects: state.projects.map((project) =>
-          project._id === action.payload.id ? action.payload : project
+          project._id === action.payload._id ? action.payload : project
         ),
         loading: false,
       };

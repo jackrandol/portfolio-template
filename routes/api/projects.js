@@ -63,7 +63,7 @@ router.post(
     }
 
     //build profile object
-    const { id, title, description, date, images, links } = req.body;
+    const { _id, title, description, date, images, links } = req.body;
 
     const projectFields = { title, description, date };
 
@@ -72,18 +72,20 @@ router.post(
 
     try {
       //find project - if project already exists then update it with the new fields
-      let project = await Project.findOne({ id: id });
+      let project = await Project.findOne({ _id: _id });
+      console.log('found this project to update', project);
 
       if (project) {
         project = await Project.findOneAndUpdate(
-          { id: id },
+          { _id: _id },
           { $set: projectFields },
           { new: true }
         );
-        console.log('project vals', project);
+        console.log('updated project', project);
         return res.json(project);
       }
       // Create
+      console.log('creating new project');
       project = new Project(projectFields);
 
       await project.save();
@@ -120,7 +122,6 @@ router.post('/imageUpload', async (req, res) => {
     const uploadResponse = await cloudinary.uploader.upload(file, {
       upload_preset: 'portfolio_dev',
     });
-    console.log(uploadResponse);
     res
       .status(200)
       .json({ url: uploadResponse.secure_url, id: uploadResponse.public_id });

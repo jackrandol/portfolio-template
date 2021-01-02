@@ -6,7 +6,6 @@ function PhotoUpload({ handleImageUrls }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewSource, setPreviewSource] = useState();
   const [fileName, setFileName] = useState('Choose file');
-  const [uploadedFileUrl, setUploadedFileUrl] = useState(null);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -15,6 +14,7 @@ function PhotoUpload({ handleImageUrls }) {
     setSelectedFile(file);
     setFileName(file.name);
     previewFile(file);
+    setMessage('');
   };
 
   const previewFile = (file) => {
@@ -35,9 +35,11 @@ function PhotoUpload({ handleImageUrls }) {
         headers: { 'Content-Type': 'application/json' },
       });
       const data = await res.json();
-      setUploadedFileUrl(data.url);
       handleImageUrls(data.url, fileName, data.id);
       setMessage('File successfully uploaded!');
+      setLoading(false);
+      setSelectedFile(null);
+      setPreviewSource();
     } catch (error) {
       console.log(error);
     }
@@ -53,8 +55,9 @@ function PhotoUpload({ handleImageUrls }) {
     reader.readAsDataURL(selectedFile);
     reader.onloadend = () => {
       setLoading(true);
-
       uploadImage(reader.result);
+      const fileInput = document.getElementById('customeFile');
+      fileInput.value = null;
     };
     reader.onerror = () => {
       setLoading(false);
@@ -76,16 +79,13 @@ function PhotoUpload({ handleImageUrls }) {
           id='customeFile'
           onChange={handleFileChange}
         />
-        <label htmlFor='customFile'>{fileName}</label>
         <button onClick={handleSubmit}>Upload Image</button>
       </div>
-      {uploadedFileUrl ? (
-        <div>
-          <img className='photoPreview' src={uploadedFileUrl} alt={fileName} />
-        </div>
-      ) : null}
       {previewSource && (
-        <img src={previewSource} alt='chosen' className='photoPreview' />
+        <div>
+          <p>preview image</p>
+          <img src={previewSource} alt='chosen' className='photoPreview' />
+        </div>
       )}
     </div>
   );

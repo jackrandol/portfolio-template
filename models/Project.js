@@ -7,14 +7,14 @@ const ProjectSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: true,
+    required: false,
   },
   date: { type: Date, required: true },
   images: [
     {
-      id: { type: String, required: true },
-      fileName: { type: String, required: true },
-      url: { type: String, require: true },
+      id: { type: String, required: false },
+      fileName: { type: String, required: false },
+      url: { type: String, required: false },
     },
   ],
   links: [
