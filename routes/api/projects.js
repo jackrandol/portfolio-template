@@ -106,14 +106,17 @@ router.delete('/:id', auth, async (req, res) => {
   try {
     let response = await Project.findOneAndRemove({ _id: req.params.id });
     let public_idArray = [];
+    let images = response.images;
     const makeArray = () => {
-      for (var i = 0; i < response.length; i++) {
-        public_idArray.push(response[i].images.id);
-        console.log(public_idArray);
+      for (var i = 0; i < images.length; i++) {
+        public_idArray.push(images[i].id);
       }
     };
     await makeArray();
-    console.log('res from proj delete', response.images);
+    let cloudinaryResponse = await cloudinary.api.delete_resources(
+      public_idArray
+    );
+    console.log(cloudinaryResponse);
     res.status(200).json({ msg: 'Project deleted' });
   } catch (err) {
     console.error(err.message);
