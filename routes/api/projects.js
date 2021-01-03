@@ -73,7 +73,6 @@ router.post(
     try {
       //find project - if project already exists then update it with the new fields
       let project = await Project.findOne({ _id: _id });
-      console.log('found this project to update', project);
 
       if (project) {
         project = await Project.findOneAndUpdate(
@@ -81,11 +80,9 @@ router.post(
           { $set: projectFields },
           { new: true }
         );
-        console.log('updated project', project);
         return res.json(project);
       }
       // Create
-      console.log('creating new project');
       project = new Project(projectFields);
 
       await project.save();
@@ -105,6 +102,8 @@ router.delete('/:id', auth, async (req, res) => {
   //remove project
   try {
     let response = await Project.findOneAndRemove({ _id: req.params.id });
+
+    //remove images from cloudinary
     let public_idArray = [];
     let images = response.images;
     const makeArray = () => {
