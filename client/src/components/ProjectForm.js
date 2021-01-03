@@ -9,11 +9,14 @@ import {
 } from '../actions/projects';
 import './ProjectForm.css';
 import PhotoUpload from './PhotoUpload';
+import axios from 'axios';
+import { ReactComponent as LoaderSvg } from '../assets/loader.svg';
 
 const ProjectForm = ({ toggleProjectForm, project }) => {
   let dispatch = useDispatch();
   const [imageUrls, setImageUrls] = useState([]);
   const [error, setError] = useState('');
+  const [imagesLoading, setImagesLoading] = useState(false);
 
   const [state, setState] = useState({
     title: '',
@@ -35,7 +38,7 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
     }
   }, []);
 
-  const [links, setLinks] = useState([{ id: '1', link: '' }]);
+  const [links, setLinks] = useState([]);
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -44,6 +47,7 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
       ...prevState,
       [name]: value,
     }));
+    setError('');
   };
 
   const addLink = (e) => {
@@ -77,7 +81,12 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
   };
 
   const handleImageUrls = (url, fileName, id) => {
-    let newImageUrlsArray = [...imageUrls, { id, url, fileName }];
+    let newImageUrlsArray;
+    if (imageUrls.length === 0) {
+      newImageUrlsArray = [{ id, url, fileName }];
+    } else {
+      newImageUrlsArray = [...imageUrls, { id, url, fileName }];
+    }
     setImageUrls(newImageUrlsArray);
   };
 
@@ -96,6 +105,7 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
     };
     if (project) {
       formData._id = state.id;
+      dispatch(setProjectsLoading());
       dispatch(updateProject(formData));
     } else {
       console.log('formData from submit new proj', formData);
@@ -106,6 +116,23 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
   const closeForm = () => {
     toggleProjectForm();
     setError('');
+  };
+
+  const deleteImage = async (cloudinaryID) => {
+    let data = { public_id: cloudinaryID };
+    setImagesLoading(true);
+    try {
+      axios.post(`/api/projects/deleteImage`, data);
+      let newImageUrlsArray = imageUrls.filter(
+        (url) => url.id !== cloudinaryID
+      );
+      setImageUrls(newImageUrlsArray);
+      setImagesLoading(false);
+    } catch (error) {
+      console.log(error);
+      setImagesLoading(false);
+      setError('image deletion failed');
+    }
   };
 
   return (
@@ -126,23 +153,26 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
           value={state.date}
           onChange={handleChange}
         ></input>
-        <input
+        <textarea
           type='text'
           name='description'
           value={state.description}
           placeholder='description'
           onChange={handleChange}
-        ></input>
-        {imageUrls && (
+        ></textarea>
+        {imageUrls.length > 0 && (
           <div>
-            <div>Uploaded Images</div>
+            <div>Uploaded Images:</div>
+            {imagesLoading && <LoaderSvg className='spinner' />}
             {imageUrls.map((image) => (
-              <img
-                key={image.id}
-                className='photoPreview'
-                src={image.url}
-                alt={image.fileName}
-              />
+              <div key={image.id}>
+                <img
+                  className='photoPreview'
+                  src={image.url}
+                  alt={image.fileName}
+                />
+                <button onClick={() => deleteImage(image.id)}>x</button>
+              </div>
             ))}
           </div>
         )}

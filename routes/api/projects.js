@@ -104,11 +104,20 @@ router.post(
 router.delete('/:id', auth, async (req, res) => {
   //remove project
   try {
-    await Project.findOneAndRemove({ _id: req.params.id });
-    res.json({ msg: 'Project deleted' });
+    let response = await Project.findOneAndRemove({ _id: req.params.id });
+    let public_idArray = [];
+    const makeArray = () => {
+      for (var i = 0; i < response.length; i++) {
+        public_idArray.push(response[i].images.id);
+        console.log(public_idArray);
+      }
+    };
+    await makeArray();
+    console.log('res from proj delete', response.images);
+    res.status(200).json({ msg: 'Project deleted' });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Service Error');
+    res.status(500).send('Server Error');
   }
 });
 
@@ -128,6 +137,27 @@ router.post('/imageUpload', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ err: 'Something went wrong' });
+  }
+});
+
+// @route DELETE api/projects/deleteImage
+// @desc delete Image from cloudinary
+// @access Private, w/o x-auth-token because cloudinary will reject the req with that header
+
+router.post('/deleteImage', async (req, res) => {
+  try {
+    let { public_id } = req.body;
+    console.log('req.body.public_id', public_id);
+    let res = await cloudinary.uploader.destroy(
+      public_id,
+      function (error, result) {
+        console.log(result);
+      }
+    );
+    console.log('res from cloudinary', res);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
   }
 });
 

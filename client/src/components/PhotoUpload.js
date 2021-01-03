@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './PhotoUpload.css';
+import { ReactComponent as LoaderSvg } from '../assets/loader.svg';
 
 function PhotoUpload({ handleImageUrls }) {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -11,10 +12,12 @@ function PhotoUpload({ handleImageUrls }) {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setSelectedFile(file);
-    setFileName(file.name);
-    previewFile(file);
-    setMessage('');
+    if (file) {
+      setSelectedFile(file);
+      setFileName(file.name);
+      previewFile(file);
+      setMessage('');
+    }
   };
 
   const previewFile = (file) => {
@@ -40,6 +43,9 @@ function PhotoUpload({ handleImageUrls }) {
       setLoading(false);
       setSelectedFile(null);
       setPreviewSource();
+      setTimeout(function () {
+        setMessage('');
+      }, 5000);
     } catch (error) {
       console.log(error);
     }
@@ -70,7 +76,6 @@ function PhotoUpload({ handleImageUrls }) {
     <div>
       <div>
         Photo Uploader
-        {loading && <div>Image is Uploading . . . </div>}
         {message && <div>{message}</div>}
         <input
           accept='.jpg,.jpeg,.png,.gif,.tiff,.tif'
@@ -81,12 +86,13 @@ function PhotoUpload({ handleImageUrls }) {
         />
         <button onClick={handleSubmit}>Upload Image</button>
       </div>
-      {previewSource && (
+      {previewSource && !loading && (
         <div>
           <p>preview image</p>
           <img src={previewSource} alt='chosen' className='photoPreview' />
         </div>
       )}
+      {loading && <LoaderSvg className='spinner' />}
     </div>
   );
 }
