@@ -25,7 +25,6 @@ function Projects(state) {
   };
 
   const handleDelete = (projectId) => {
-    console.log('delete project ', projectId);
     dispatch(deleteProject(projectId));
   };
 
@@ -62,19 +61,22 @@ function Projects(state) {
                 </div>
               ))}
             <div className='linkList'>
-              Links:
-              {project.links &&
-                project.links.map((link) => (
-                  <li key={link._id}>
-                    <a
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      href={link.link}
-                    >
-                      {link.link}
-                    </a>
-                  </li>
-                ))}
+              {project.links.length !== 0 && (
+                <div>
+                  <p>Links:</p>
+                  {project.links.map((link) => (
+                    <li key={link._id}>
+                      <a
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        href={link.link}
+                      >
+                        {link.link}
+                      </a>
+                    </li>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         ))}

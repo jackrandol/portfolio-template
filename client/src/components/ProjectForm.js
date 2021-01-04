@@ -17,6 +17,7 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
   const [imageUrls, setImageUrls] = useState([]);
   const [error, setError] = useState('');
   const [imagesLoading, setImagesLoading] = useState(false);
+  const [savedProject, setSavedProject] = useState();
 
   const [state, setState] = useState({
     title: '',
@@ -27,7 +28,6 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
   useEffect(() => {
     if (project) {
       setState({
-        ...state,
         id: project._id,
         title: project.title,
         description: project.description,
@@ -36,7 +36,7 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
       setLinks(project.links);
       setImageUrls(project.images);
     }
-  }, []);
+  }, [project]);
 
   const [links, setLinks] = useState([]);
 
@@ -108,14 +108,16 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
       dispatch(setProjectsLoading());
       dispatch(updateProject(formData));
     } else {
-      console.log('formData from submit new proj', formData);
+      dispatch(setProjectsLoading());
       dispatch(addProject(formData));
     }
+    setSavedProject(formData);
   };
 
   const closeForm = () => {
     toggleProjectForm();
     setError('');
+    setSavedProject(null);
   };
 
   const deleteImage = async (cloudinaryID) => {
@@ -138,65 +140,109 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
   return (
     <div className='projectForm'>
       <button onClick={closeForm}>X</button>
-      <form onSubmit={(e) => onSubmit(e)}>
-        {error && <h1>{error}</h1>}
-        <input
-          type='text'
-          name='title'
-          value={state.title}
-          placeholder='title'
-          onChange={handleChange}
-        ></input>
-        <input
-          type='date'
-          name='date'
-          value={state.date}
-          onChange={handleChange}
-        ></input>
-        <textarea
-          type='text'
-          name='description'
-          value={state.description}
-          placeholder='description'
-          onChange={handleChange}
-        ></textarea>
-        {imageUrls.length > 0 && (
-          <div>
-            <div>Uploaded Images:</div>
-            {imagesLoading && <LoaderSvg className='spinner' />}
-            {imageUrls.map((image) => (
-              <div key={image.id}>
-                <img
-                  className='photoPreview'
-                  src={image.url}
-                  alt={image.fileName}
-                />
-                <button onClick={() => deleteImage(image.id)}>x</button>
-              </div>
-            ))}
+      {savedProject ? (
+        <div>
+          <div>Project saved!</div>
+
+          <div className='projectCard'>
+            <h1>{savedProject.title}</h1>
+            <p>{savedProject.description}</p>
+            <p>{convertISODate(savedProject.date)}</p>
+            <div className='projectImages'>
+              {savedProject.images &&
+                savedProject.images.map((image) => (
+                  <div key={image.id}>
+                    <img
+                      className='projectImage'
+                      src={image.url}
+                      alt={image.fileName}
+                    ></img>
+                  </div>
+                ))}
+            </div>
+            <div className='linkList'>
+              {savedProject.links.length !== 0 && (
+                <div>
+                  <p>Links</p>
+                  {savedProject.links.map((link) => (
+                    <li key={link.id}>
+                      <a
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        href={link.link}
+                      >
+                        {link.link}
+                      </a>
+                    </li>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-        )}
-        <PhotoUpload handleImageUrls={handleImageUrls} />
-        <ul>
-          {links &&
-            links.map((link) => (
-              <li key={link.id}>
-                <label htmlFor='link'>
-                  external project link: (must begin with http or https)
-                </label>
-                <input
-                  name='link'
-                  type='text'
-                  defaultValue={link.link}
-                  onChange={(e) => handleLink(e, link.id)}
-                ></input>
-                <button onClick={() => deleteLink(link.id)}>X</button>
-              </li>
-            ))}
-        </ul>
-        <button onClick={addLink}>add link</button>
-        <input type='submit' value='Save Project' />
-      </form>
+        </div>
+      ) : (
+        <form onSubmit={(e) => onSubmit(e)}>
+          {error && <h1>{error}</h1>}
+          <input
+            type='text'
+            name='title'
+            value={state.title}
+            placeholder='title'
+            onChange={handleChange}
+          ></input>
+          <input
+            type='date'
+            name='date'
+            value={state.date}
+            onChange={handleChange}
+          ></input>
+          <textarea
+            type='text'
+            name='description'
+            value={state.description}
+            placeholder='description'
+            onChange={handleChange}
+          ></textarea>
+          {imageUrls.length > 0 && (
+            <div>
+              <div>Uploaded Images:</div>
+              <div className='projectImages'>
+                {imagesLoading && <LoaderSvg className='spinner' />}
+                {imageUrls.map((image) => (
+                  <div key={image.id}>
+                    <img
+                      className='photoPreview'
+                      src={image.url}
+                      alt={image.fileName}
+                    />
+                    <button onClick={() => deleteImage(image.id)}>x</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          <PhotoUpload handleImageUrls={handleImageUrls} />
+          <ul>
+            {links &&
+              links.map((link) => (
+                <li key={link.id}>
+                  <label htmlFor='link'>
+                    external project link: (must begin with http or https)
+                  </label>
+                  <input
+                    name='link'
+                    type='text'
+                    defaultValue={link.link}
+                    onChange={(e) => handleLink(e, link.id)}
+                  ></input>
+                  <button onClick={() => deleteLink(link.id)}>X</button>
+                </li>
+              ))}
+          </ul>
+          <button onClick={addLink}>add link</button>
+          <input type='submit' value='Save Project' />
+        </form>
+      )}
     </div>
   );
 };

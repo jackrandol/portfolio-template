@@ -31,7 +31,6 @@ export default function (state = initialState, action) {
         loading: false,
       };
     case ADD_PROJECT:
-      console.log(action.payload);
       return {
         ...state,
         projects: [...state.projects, action.payload],

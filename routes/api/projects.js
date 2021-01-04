@@ -102,20 +102,20 @@ router.delete('/:id', auth, async (req, res) => {
   //remove project
   try {
     let response = await Project.findOneAndRemove({ _id: req.params.id });
-
     //remove images from cloudinary
     let public_idArray = [];
-    let images = response.images;
-    const makeArray = () => {
-      for (var i = 0; i < images.length; i++) {
-        public_idArray.push(images[i].id);
-      }
-    };
-    await makeArray();
-    let cloudinaryResponse = await cloudinary.api.delete_resources(
-      public_idArray
-    );
-    console.log(cloudinaryResponse);
+    if (response.images.length > 0) {
+      let images = response.images;
+      const makeArray = () => {
+        for (var i = 0; i < images.length; i++) {
+          public_idArray.push(images[i].id);
+        }
+      };
+      await makeArray();
+      let cloudinaryResponse = await cloudinary.api.delete_resources(
+        public_idArray
+      );
+    }
     res.status(200).json({ msg: 'Project deleted' });
   } catch (err) {
     console.error(err.message);
@@ -149,14 +149,8 @@ router.post('/imageUpload', async (req, res) => {
 router.post('/deleteImage', async (req, res) => {
   try {
     let { public_id } = req.body;
-    console.log('req.body.public_id', public_id);
-    let res = await cloudinary.uploader.destroy(
-      public_id,
-      function (error, result) {
-        console.log(result);
-      }
-    );
-    console.log('res from cloudinary', res);
+    let response = await cloudinary.uploader.destroy(public_id);
+    res.status(200).json({ msg: 'photo deleted' });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');

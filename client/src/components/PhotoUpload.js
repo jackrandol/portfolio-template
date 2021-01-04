@@ -11,6 +11,7 @@ function PhotoUpload({ handleImageUrls }) {
   const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
+    console.log('handleFileChange');
     const file = e.target.files[0];
     if (file) {
       setSelectedFile(file);
@@ -29,6 +30,7 @@ function PhotoUpload({ handleImageUrls }) {
   };
 
   const uploadImage = async (base64EncodedImage) => {
+    console.log('uploadIamge');
     try {
       var instance = axios.create();
       delete instance.defaults.headers.common['x-auth-token'];
@@ -42,16 +44,17 @@ function PhotoUpload({ handleImageUrls }) {
       setMessage('File successfully uploaded!');
       setLoading(false);
       setSelectedFile(null);
-      setPreviewSource();
+      setPreviewSource(null);
       setTimeout(function () {
         setMessage('');
-      }, 5000);
+      }, 2000);
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleSubmit = async (e) => {
+    console.log('handlesubmit');
     e.preventDefault();
     if (!selectedFile || selectedFile.size >= 4 * 1024 * 1024) {
       setMessage('File is larger than 4mb or there is no file selected');
@@ -68,15 +71,13 @@ function PhotoUpload({ handleImageUrls }) {
     reader.onerror = () => {
       setLoading(false);
       setMessage('something went wrong with your file upload');
-      console.error('AHHHHHHHH!! error');
     };
   };
 
   return (
-    <div>
-      <div>
+    <div className='uploaderBox'>
+      <div className='uploaderBox-left'>
         Photo Uploader
-        {message && <div>{message}</div>}
         <input
           accept='.jpg,.jpeg,.png,.gif,.tiff,.tif'
           name='image'
@@ -84,15 +85,18 @@ function PhotoUpload({ handleImageUrls }) {
           id='customeFile'
           onChange={handleFileChange}
         />
-        <button onClick={handleSubmit}>Upload Image</button>
+        <button onClick={handleSubmit}>Upload and Save Image</button>
       </div>
-      {previewSource && !loading && (
-        <div>
-          <p>preview image</p>
-          <img src={previewSource} alt='chosen' className='photoPreview' />
-        </div>
-      )}
-      {loading && <LoaderSvg className='spinner' />}
+      <div className='uploaderBox-right'>
+        {previewSource && !loading && (
+          <div>
+            <p>preview image</p>
+            <img src={previewSource} alt='chosen' className='photoPreview' />
+          </div>
+        )}
+        {loading && <LoaderSvg className='spinner' />}
+        {message && <div>{message}</div>}
+      </div>
     </div>
   );
 }

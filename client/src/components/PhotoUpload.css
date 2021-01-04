@@ -2,6 +2,19 @@
   width: 100px;
 }
 
+.uploaderBox {
+  background-color: wheat;
+  display: flex;
+  flex-direction: row;
+  padding: 5px;
+  row-gap: 7px;
+}
+
+.uploaderBox-left {
+  display: flex;
+  flex-direction: column;
+}
+
 .spinner {
   width: 60px;
   height: 60px;

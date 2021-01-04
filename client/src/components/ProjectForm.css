@@ -1,9 +1,14 @@
 .projectForm {
   width: 500px;
-  height: 600px;
+  height: 70vh;
   overflow: scroll;
   background-color: sandybrown;
   padding: 10px;
   display: flex;
   flex-direction: column;
+}
+
+.projectImages {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
 }
