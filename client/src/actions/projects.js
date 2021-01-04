@@ -40,7 +40,13 @@ export const addProject = (project) => async (dispatch) => {
       })
     );
   } catch (error) {
-    dispatch({});
+    dispatch({
+      type: PROJECTS_ERROR,
+      payload: {
+        msg: error.response.statusText,
+        status: error.response.status,
+      },
+    });
   }
 };
 

@@ -17,8 +17,30 @@ button {
   max-width: 120px;
 }
 
+.buttonSubmit {
+  border-radius: 10px;
+  background-color: plum;
+  margin: 3px;
+  padding: 6px;
+  max-width: 120px;
+  color: black;
+  font-weight: bold;
+  border: 2px black solid;
+}
+
+.buttonSubmit:hover {
+  cursor: pointer;
+  background-color: pink;
+}
+
 .alert {
   color: red;
   font-weight: bold;
   font-style: italic;
+}
+
+li {
+  list-style-type: none;
+  padding: 0px;
+  margin: 0px;
 }

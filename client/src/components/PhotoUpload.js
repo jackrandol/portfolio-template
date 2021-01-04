@@ -11,7 +11,6 @@ function PhotoUpload({ handleImageUrls }) {
   const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
-    console.log('handleFileChange');
     const file = e.target.files[0];
     if (file) {
       setSelectedFile(file);
@@ -30,7 +29,6 @@ function PhotoUpload({ handleImageUrls }) {
   };
 
   const uploadImage = async (base64EncodedImage) => {
-    console.log('uploadIamge');
     try {
       var instance = axios.create();
       delete instance.defaults.headers.common['x-auth-token'];
@@ -54,7 +52,6 @@ function PhotoUpload({ handleImageUrls }) {
   };
 
   const handleSubmit = async (e) => {
-    console.log('handlesubmit');
     e.preventDefault();
     if (!selectedFile || selectedFile.size >= 4 * 1024 * 1024) {
       setMessage('File is larger than 4mb or there is no file selected');

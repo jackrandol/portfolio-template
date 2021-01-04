@@ -138,8 +138,11 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
   };
 
   return (
-    <div className='projectForm'>
-      <button onClick={closeForm}>X</button>
+    <div className='projectFormModal'>
+      <button className='closeModal' onClick={closeForm}>
+        X
+      </button>
+      <h1>Create a New Project:</h1>
       {savedProject ? (
         <div>
           <div>Project saved!</div>
@@ -181,7 +184,7 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
           </div>
         </div>
       ) : (
-        <form onSubmit={(e) => onSubmit(e)}>
+        <form className='projectForm' onSubmit={(e) => onSubmit(e)}>
           {error && <h1>{error}</h1>}
           <input
             type='text'
@@ -223,24 +226,25 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
           )}
           <PhotoUpload handleImageUrls={handleImageUrls} />
           <ul>
-            {links &&
-              links.map((link) => (
-                <li key={link.id}>
-                  <label htmlFor='link'>
-                    external project link: (must begin with http or https)
-                  </label>
-                  <input
-                    name='link'
-                    type='text'
-                    defaultValue={link.link}
-                    onChange={(e) => handleLink(e, link.id)}
-                  ></input>
-                  <button onClick={() => deleteLink(link.id)}>X</button>
-                </li>
-              ))}
+            {links && (
+              <div>
+                <p>external project link: (must begin with http or https)</p>
+                {links.map((link) => (
+                  <li className='externalLinkInput' key={link.id}>
+                    <input
+                      name='link'
+                      type='text'
+                      defaultValue={link.link}
+                      onChange={(e) => handleLink(e, link.id)}
+                    ></input>
+                    <button onClick={() => deleteLink(link.id)}>X</button>
+                  </li>
+                ))}
+              </div>
+            )}
           </ul>
           <button onClick={addLink}>add link</button>
-          <input type='submit' value='Save Project' />
+          <input className='buttonSubmit' type='submit' value='Save Project' />
         </form>
       )}
     </div>

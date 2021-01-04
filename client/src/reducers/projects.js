@@ -44,6 +44,7 @@ export default function (state = initialState, action) {
     case PROJECTS_ERROR:
       return {
         ...state,
+        error: action.payload,
         success: false,
       };
     case UPDATE_PROJECT:
