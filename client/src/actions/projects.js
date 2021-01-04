@@ -33,13 +33,13 @@ export const setProjectsLoading = () => {
 export const addProject = (project) => async (dispatch) => {
   dispatch(setProjectsLoading());
   try {
-    axios.post('/api/projects', project).then((res) =>
-      dispatch({
-        type: ADD_PROJECT,
-        payload: res.data,
-      })
-    );
+    const res = await axios.post('/api/projects', project);
+    dispatch({
+      type: ADD_PROJECT,
+      payload: res.data,
+    });
   } catch (error) {
+    console.log(error);
     dispatch({
       type: PROJECTS_ERROR,
       payload: {
