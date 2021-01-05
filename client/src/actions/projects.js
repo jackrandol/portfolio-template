@@ -7,6 +7,7 @@ import {
   UPDATE_PROJECT,
   DELETE_PROJECT,
 } from './types';
+import { setAlert } from './alert';
 
 //Load Projects;
 export const loadProjects = () => async (dispatch) => {
@@ -38,13 +39,17 @@ export const addProject = (project) => async (dispatch) => {
       type: ADD_PROJECT,
       payload: res.data,
     });
-  } catch (error) {
-    console.log(error);
+    dispatch(setAlert('Project Created', 'success'));
+  } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+    }
     dispatch({
       type: PROJECTS_ERROR,
       payload: {
-        msg: error.response.statusText,
-        status: error.response.status,
+        msg: err.response.statusText,
+        status: err.response.status,
       },
     });
   }

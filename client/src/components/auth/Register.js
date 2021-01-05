@@ -38,7 +38,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
           name='name'
           value={name}
           onChange={(e) => onChange(e)}
-          // required
+          required
         />
         <input
           type='text'
@@ -46,7 +46,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
           name='email'
           value={email}
           onChange={(e) => onChange(e)}
-          // required
+          required
         />
         <input
           type='password'
@@ -54,13 +54,13 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
           name='password'
           value={password}
           onChange={(e) => onChange(e)}
-          // minLength='6'
+          minLength='6'
         />
         <input
           type='password'
           placeholder='Please repeat password'
           name='password2'
-          // minLength='6'
+          minLength='6'
           value={password2}
           onChange={(e) => onChange(e)}
         />

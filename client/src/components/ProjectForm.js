@@ -92,8 +92,8 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    if (state.title === '') {
-      setError('you have forgotten title or date');
+    if (state.title === '' || state.description === '' || state.date === '') {
+      setError('Title, description and date are all required');
       return;
     }
     let formData = {
@@ -142,7 +142,6 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
       <button className='closeModal' onClick={closeForm}>
         X
       </button>
-      <h1>Create a New Project:</h1>
       {savedProject ? (
         <div>
           <div>Project saved!</div>
@@ -185,7 +184,8 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
         </div>
       ) : (
         <form className='projectForm' onSubmit={(e) => onSubmit(e)}>
-          {error && <h1>{error}</h1>}
+          <h1>Create a New Project:</h1>
+          {error && <p className='alert'>{error}</p>}
           <input
             type='text'
             name='title'
