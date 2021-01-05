@@ -5,7 +5,6 @@ import Landing from './components/layout/Landing';
 import Navbar from './components/layout/Navbar';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
-import Projects from './components/pages/Projects';
 import Alert from './components/layout/Alert';
 import Dashboard from './components/dashboard/Dashboard';
 import PrivateRoute from './components/routing/PrivateRoute';
@@ -34,15 +33,16 @@ const App = () => {
     <Provider store={store}>
       <Router>
         <Fragment>
-          <Navbar />
-          <Route exact path='/' component={Landing}></Route>
-          <Alert />
-          <Switch>
-            <Route exact path='/projects' component={Projects} />
-            <Route exact path='/login' component={Login} />
-            <Route exact path='/register' component={Register} />
-            <PrivateRoute exact path='/dashboard' component={Dashboard} />
-          </Switch>
+          <div className='appBoard'>
+            <Navbar />
+            <Route exact path='/' component={Landing}></Route>
+            <Alert />
+            <Switch>
+              <Route exact path='/login' component={Login} />
+              <PrivateRoute exact path='/register' component={Register} />
+              <PrivateRoute exact path='/dashboard' component={Dashboard} />
+            </Switch>
+          </div>
         </Fragment>
       </Router>
     </Provider>

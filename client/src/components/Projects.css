@@ -1,0 +1,17 @@
+.projectCard {
+  background-color: var(--secondaryColor);
+  padding: 10px;
+  overflow: scroll;
+  margin: 8px 0px;
+  width: 90%;
+}
+
+.projectImage {
+  width: 180px;
+}
+
+.projectsHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

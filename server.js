@@ -1,12 +1,7 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
-const connectDB = require('./config/db');
+const connectDB = require('./utils/db');
 const cors = require('cors');
-
-//Gridfs
-const methodOverride = require('method-override');
-const multer = require('multer');
-const GridFsStorage = require('multer-gridfs-storage');
 
 const app = express();
 

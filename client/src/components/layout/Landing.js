@@ -1,9 +1,10 @@
 import React from 'react';
+import Projects from '../Projects';
 
 const Landing = () => {
   return (
     <div>
-      <h1>Landing Page</h1>
+      <Projects />
     </div>
   );
 };

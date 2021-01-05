@@ -3,6 +3,13 @@
   margin: 0px;
 }
 
+:root {
+  --primaryColor: sandybrown;
+  --secondaryColor: wheat;
+  --accentColor: plum;
+  --alertColor: red;
+}
+
 form {
   display: flex;
   flex-direction: column;
@@ -17,9 +24,30 @@ button {
   max-width: 120px;
 }
 
+.appBoard {
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+  margin: 10px;
+}
+
+.login {
+  background-color: var(--primaryColor);
+  width: 400px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+
+.loginFields {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+}
+
 .buttonSubmit {
   border-radius: 10px;
-  background-color: plum;
+  background-color: var(--accentColor);
   margin: 3px;
   padding: 6px;
   max-width: 120px;

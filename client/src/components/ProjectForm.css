@@ -1,6 +1,9 @@
 .projectFormModal {
+  position: fixed;
+  top: 10vh;
+  left: 25vh;
   width: 500px;
-  height: 70vh;
+  bottom: 10px;
   overflow: scroll;
   background-color: sandybrown;
   padding: 10px;

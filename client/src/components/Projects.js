@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { convertISODate } from '../../utils/Utils';
+import { convertISODate } from '../utils/Utils';
 import './Projects.css';
 import { useDispatch } from 'react-redux';
-import { deleteProject } from '../../actions/projects';
-import ProjectForm from '../ProjectForm';
+import { deleteProject } from '../actions/projects';
+import ProjectForm from './ProjectForm';
 
 function Projects(state) {
   let dispatch = useDispatch();
@@ -30,7 +30,15 @@ function Projects(state) {
 
   return (
     <div>
-      <h1>Projects</h1>
+      <div className='projectsHeader'>
+        <h1>Projects</h1>
+        {auth && !projectFormVisible && (
+          <button onClick={() => toggleProjectForm()}>add project +</button>
+        )}
+      </div>
+      {projectFormVisible && !selectedProject && (
+        <ProjectForm toggleProjectForm={toggleProjectForm} />
+      )}
       {projectsLoading && <div>loading projects now</div>}
       {projectFormVisible && selectedProject && (
         <ProjectForm
@@ -48,7 +56,9 @@ function Projects(state) {
               </div>
             )}
             <h1>{project.title}</h1>
+            <p>description:</p>
             <p>{project.description}</p>
+            <p>date:</p>
             <p>{convertISODate(project.date)}</p>
             {project.images &&
               project.images.map((image) => (

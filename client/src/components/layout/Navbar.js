@@ -3,13 +3,19 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth';
+import './Navbar.css';
 
 const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
   const authLinks = (
-    <div>
-      <button className='navLink' onClick={logout}>
-        logout
-      </button>
+    <div className='navBarAuth'>
+      <NavLink
+        exact
+        activeClassName='navLink--active'
+        className='navLink'
+        to={'/register'}
+      >
+        Register New Admin
+      </NavLink>
       <NavLink
         exact
         activeClassName='navLink--active'
@@ -18,11 +24,14 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
       >
         dashboard
       </NavLink>
+      <button className='navLink' onClick={logout}>
+        logout
+      </button>
     </div>
   );
 
   const guestLinks = (
-    <div>
+    <div className='navBarAuth'>
       <NavLink
         exact
         activeClassName='navLink--active'
@@ -31,18 +40,10 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
       >
         login
       </NavLink>
-      <NavLink
-        exact
-        activeClassName='navLink--active'
-        className='navLink'
-        to={'/register'}
-      >
-        Register
-      </NavLink>
     </div>
   );
   return (
-    <div>
+    <div className='navBar'>
       <NavLink
         exact
         activeClassName='navLink--active'
@@ -50,14 +51,6 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
         to={'/'}
       >
         Home
-      </NavLink>
-      <NavLink
-        exact
-        activeClassName='navLink--active'
-        className='navLink'
-        to={'/projects'}
-      >
-        Projects
       </NavLink>
       <NavLink
         exact

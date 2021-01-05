@@ -11,7 +11,9 @@ function Dashboard() {
   return (
     <div>
       <h1>Dashboard</h1>
-      <button onClick={toggleProjectForm}>Add Project</button>
+      {!projectFormVisible && (
+        <button onClick={toggleProjectForm}>Add Project</button>
+      )}
       {projectFormVisible && (
         <div>
           <ProjectForm toggleProjectForm={toggleProjectForm} />

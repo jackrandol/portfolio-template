@@ -27,15 +27,11 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
     }
   };
 
-  if (isAuthenticated) {
-    return <Redirect to='/' />;
-  }
-
   return (
-    <Fragment>
+    <div className='login'>
       <h1>Register</h1>
-      <i /> Create an account here
-      <form onSubmit={(e) => onSubmit(e)}>
+      <i /> Create a new administrator here:
+      <form className='loginFields' onSubmit={(e) => onSubmit(e)}>
         <input
           type='text'
           placeholder='Name'
@@ -70,10 +66,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         />
         <input type='submit' value='Register' />
       </form>
-      <p>
-        Already have an account? <Link to='/login'>Log in here</Link>{' '}
-      </p>
-    </Fragment>
+    </div>
   );
 };
 

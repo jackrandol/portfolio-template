@@ -25,10 +25,10 @@ const Login = ({ login, isAuthenticated }) => {
     return <Redirect to='/dashboard' />;
   }
   return (
-    <Fragment>
+    <div className='login'>
       <h1>Login</h1>
-      <i /> Sign in to your account here
-      <form onSubmit={(e) => onSubmit(e)}>
+      <i /> If you are an administrator you can log in here:
+      <form className='loginFields' onSubmit={(e) => onSubmit(e)}>
         <input
           type='text'
           placeholder='Email Address'
@@ -46,11 +46,8 @@ const Login = ({ login, isAuthenticated }) => {
           minLength='6'
         />
         <input type='submit' value='Log in' />
-        <p>
-          Don't have an account <Link to='/register'>Register here</Link>
-        </p>
       </form>
-    </Fragment>
+    </div>
   );
 };
 

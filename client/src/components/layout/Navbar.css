@@ -1,0 +1,9 @@
+.navBar {
+  display: flex;
+  flex-direction: column;
+}
+
+.navBarAuth {
+  display: flex;
+  flex-direction: column;
+}
