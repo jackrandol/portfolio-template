@@ -4,6 +4,18 @@ const Project = require('../../models/Project');
 const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
 const { cloudinary } = require('../../utils/cloudinary');
+const multer = require('multer');
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fileName + '-' + Date.now());
+  },
+});
+
+var upload = multer({ storage: storage });
 
 // @route GET api/projects/id
 // @desc Test get specific project
@@ -125,7 +137,7 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
-// @route DELETE api/projects/upload
+// @route POST api/projects/imageUpload
 // @desc upload photo to cloudinary
 // @access Private, w/o x-auth-token because cloudinary will reject the req with that header
 
@@ -141,6 +153,18 @@ router.post('/imageUpload', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ err: 'Something went wrong' });
+  }
+});
+
+//@route POST api/projects/videoUpload
+//@desc upload video to cloudinary
+//@access Private
+
+router.post('/videoUpload', upload.single('video'), async (req, res) => {
+  try {
+    console.log('from video upload');
+  } catch (err) {
+    console.log(err);
   }
 });
 

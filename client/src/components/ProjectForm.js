@@ -9,12 +9,14 @@ import {
 } from '../actions/projects';
 import './ProjectForm.css';
 import PhotoUpload from './PhotoUpload';
+import VideoUpload from './VideoUpload';
 import axios from 'axios';
 import { ReactComponent as LoaderSvg } from '../assets/loader.svg';
 
 const ProjectForm = ({ toggleProjectForm, project }) => {
   let dispatch = useDispatch();
   const [imageUrls, setImageUrls] = useState([]);
+  const [videoUrls, setVideoUrls] = useState([]);
   const [error, setError] = useState('');
   const [imagesLoading, setImagesLoading] = useState(false);
   const [savedProject, setSavedProject] = useState();
@@ -88,6 +90,16 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
       newImageUrlsArray = [...imageUrls, { id, url, fileName }];
     }
     setImageUrls(newImageUrlsArray);
+  };
+
+  const handleVideoUrls = (url, fileName, id) => {
+    let newVideoUrlsArray;
+    if (videoUrls.length === 0) {
+      newVideoUrlsArray = [{ id, url, fileName }];
+    } else {
+      newVideoUrlsArray = [...imageUrls, { id, url, fileName }];
+    }
+    setVideoUrls(newVideoUrlsArray);
   };
 
   const onSubmit = (e) => {
@@ -225,6 +237,7 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
             </div>
           )}
           <PhotoUpload handleImageUrls={handleImageUrls} />
+          <VideoUpload handleVideoUrls={handleVideoUrls} />
           <ul>
             {links && (
               <div>
