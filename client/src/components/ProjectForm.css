@@ -3,12 +3,13 @@
   top: 10vh;
   left: 25vh;
   width: 500px;
-  bottom: 10px;
+  max-height: 85vh;
   overflow: scroll;
   background-color: sandybrown;
   padding: 10px;
   display: flex;
   flex-direction: column;
+  z-index: 10;
 }
 
 .projectImages {
