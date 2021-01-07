@@ -70,6 +70,25 @@ function Projects(state) {
                   ></img>
                 </div>
               ))}
+            {project.videos && (
+              <div>
+                <div className='projectVideos'>
+                  {project.videos.map((video) => (
+                    <div key={video.id}>
+                      <video
+                        src={video.url}
+                        id='videos'
+                        width='320'
+                        height='240'
+                        controls
+                      >
+                        Your browser doesn't support this video format.
+                      </video>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             <div className='linkList'>
               {project.links.length !== 0 && (
                 <div>
