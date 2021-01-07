@@ -29,23 +29,33 @@ function PhotoUpload({ handleImageUrls }) {
   };
 
   const uploadImage = async (base64EncodedImage) => {
+    setLoading(true);
     try {
-      var instance = axios.create();
-      delete instance.defaults.headers.common['x-auth-token'];
       const res = await fetch('/api/projects/imageUpload', {
         method: 'POST',
         body: JSON.stringify({ data: base64EncodedImage }),
         headers: { 'Content-Type': 'application/json' },
       });
       const data = await res.json();
-      handleImageUrls(data.url, fileName, data.id);
-      setMessage('File successfully uploaded!');
-      setLoading(false);
-      setSelectedFile(null);
-      setPreviewSource(null);
-      setTimeout(function () {
-        setMessage('');
-      }, 2000);
+      if (res.status === 200) {
+        handleImageUrls(data.url, fileName, data.id);
+        setMessage('File successfully uploaded!');
+        setLoading(false);
+        setSelectedFile(null);
+        setPreviewSource(null);
+        setTimeout(function () {
+          setMessage('');
+        }, 2000);
+      }
+      if (res.status === 500) {
+        setMessage('Something went wrong with upload!');
+        setLoading(false);
+        setSelectedFile(null);
+        setPreviewSource(null);
+        setTimeout(function () {
+          setMessage('');
+        }, 2000);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -60,7 +70,6 @@ function PhotoUpload({ handleImageUrls }) {
     const reader = new FileReader();
     reader.readAsDataURL(selectedFile);
     reader.onloadend = () => {
-      setLoading(true);
       uploadImage(reader.result);
       const fileInput = document.getElementById('customeFile');
       fileInput.value = null;

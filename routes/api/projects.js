@@ -4,18 +4,6 @@ const Project = require('../../models/Project');
 const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
 const { cloudinary } = require('../../utils/cloudinary');
-const multer = require('multer');
-
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads');
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fileName + '-' + Date.now());
-  },
-});
-
-var upload = multer({ storage: storage });
 
 // @route GET api/projects/id
 // @desc Test get specific project
@@ -160,11 +148,21 @@ router.post('/imageUpload', async (req, res) => {
 //@desc upload video to cloudinary
 //@access Private
 
-router.post('/videoUpload', upload.single('video'), async (req, res) => {
+router.post('/videoUpload', async (req, res) => {
   try {
-    console.log('from video upload');
+    const file = req.files.file.tempFilePath;
+    const uploadResponse = await cloudinary.uploader.upload(file, {
+      resource_type: 'video',
+      upload_preset: 'portfolio_dev',
+    });
+    res.status(200).json({
+      url: uploadResponse.secure_url,
+      id: uploadResponse.public_id,
+      success: true,
+    });
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    res.status(500).json({ success: false, err: 'Something went wrong' });
   }
 });
 

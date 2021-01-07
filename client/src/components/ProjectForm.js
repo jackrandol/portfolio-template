@@ -19,6 +19,7 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
   const [videoUrls, setVideoUrls] = useState([]);
   const [error, setError] = useState('');
   const [imagesLoading, setImagesLoading] = useState(false);
+  const [videosLoading, setVideosLoading] = useState(false);
   const [savedProject, setSavedProject] = useState();
 
   const [state, setState] = useState({
@@ -97,7 +98,7 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
     if (videoUrls.length === 0) {
       newVideoUrlsArray = [{ id, url, fileName }];
     } else {
-      newVideoUrlsArray = [...imageUrls, { id, url, fileName }];
+      newVideoUrlsArray = [...videoUrls, { id, url, fileName }];
     }
     setVideoUrls(newVideoUrlsArray);
   };
@@ -146,6 +147,23 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
       console.log(error);
       setImagesLoading(false);
       setError('image deletion failed');
+    }
+  };
+
+  const deleteVideo = async (cloudinaryID) => {
+    let data = { public_id: cloudinaryID };
+    setVideosLoading(true);
+    try {
+      axios.post(`/api/projects/deleteImage`, data);
+      let newVideoUrlsArray = videoUrls.filter(
+        (url) => url.id !== cloudinaryID
+      );
+      setVideoUrls(newVideoUrlsArray);
+      setVideosLoading(false);
+    } catch (error) {
+      console.log(error);
+      setVideosLoading(false);
+      setError('video deletion failed');
     }
   };
 
@@ -237,6 +255,28 @@ const ProjectForm = ({ toggleProjectForm, project }) => {
             </div>
           )}
           <PhotoUpload handleImageUrls={handleImageUrls} />
+          {videoUrls.length > 0 && (
+            <div>
+              <div>Uploaded Videos:</div>
+              <div className='projectVideos'>
+                {videosLoading && <LoaderSvg className='spinner' />}
+                {videoUrls.map((video) => (
+                  <div key={video.id}>
+                    <video
+                      src={video.url}
+                      id='videos'
+                      width='320'
+                      height='240'
+                      controls
+                    >
+                      Your browser doesn't support this video format.
+                    </video>
+                    <button onClick={() => deleteVideo(video.id)}>x</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           <VideoUpload handleVideoUrls={handleVideoUrls} />
           <ul>
             {links && (

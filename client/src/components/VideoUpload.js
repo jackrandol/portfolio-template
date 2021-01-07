@@ -14,30 +14,54 @@ function VideoUpload({ handleVideoUrls }) {
     if (file) {
       setSelectedFile(file);
       setFileName(file.name);
-      console.log('fileName', fileName);
-      setMessage('');
+    } else {
+      setSelectedFile(null);
+      setFileName('Choose file');
     }
+    setMessage('');
   };
 
   const uploadVideo = async () => {
+    setLoading(true);
     var formData = new FormData();
-    console.log('selectedFile', selectedFile);
     formData.append('file', selectedFile);
     formData.append('title', fileName);
     try {
-      var instance = axios.create();
-      delete instance.defaults.headers.common['x-auth-token'];
-      const res = await axios.post('/api/projects/videoUpload', formData);
-      const data = await res.json();
+      const result = await fetch('/api/projects/videoUpload', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await result.json();
+      const videoInput = document.getElementById('videoFile');
 
-      handleVideoUrls(data.url, fileName, data.id);
-      setMessage('File successfully uploaded!');
+      if (data.success) {
+        handleVideoUrls(data.url, fileName, data.id);
+        setMessage('File successfully uploaded!');
+        setLoading(false);
+        setSelectedFile(null);
+        videoInput.value = null;
+        setTimeout(function () {
+          setMessage('');
+        }, 2000);
+      }
+      if (data.success === false) {
+        setMessage('Something went wrong with your upload!');
+        setLoading(false);
+        setSelectedFile(null);
+        setFileName('Choose file');
+        videoInput.value = null;
+        setTimeout(function () {
+          setMessage('');
+        }, 3000);
+      }
+    } catch (error) {
+      setMessage('Something went wrong with your upload!');
       setLoading(false);
       setSelectedFile(null);
+      setFileName('Choose file');
       setTimeout(function () {
         setMessage('');
       }, 2000);
-    } catch (error) {
       console.log(error);
     }
   };
@@ -48,7 +72,7 @@ function VideoUpload({ handleVideoUrls }) {
       setMessage('File is larger than 4mb or there is no file selected');
       return;
     }
-    uploadVideo(selectedFile);
+    uploadVideo();
   };
 
   return (
@@ -57,9 +81,9 @@ function VideoUpload({ handleVideoUrls }) {
         Video Uploader
         <input
           accept='video/*'
-          name='video'
+          name='file'
           type='file'
-          id='customeFile'
+          id='videoFile'
           onChange={handleFileChange}
         />
         <button onClick={handleSubmit}>Upload and Save Image</button>

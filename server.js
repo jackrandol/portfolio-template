@@ -2,10 +2,9 @@ const express = require('express');
 const fileUpload = require('express-fileupload');
 const connectDB = require('./utils/db');
 const cors = require('cors');
-
 const app = express();
 
-app.use(fileUpload());
+app.use(fileUpload({ useTempFiles: true }));
 
 //Connect DB
 connectDB();
