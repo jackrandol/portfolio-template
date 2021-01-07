@@ -65,12 +65,13 @@ router.post(
     }
 
     //build profile object
-    const { _id, title, description, date, images, links } = req.body;
+    const { _id, title, description, date, images, links, videos } = req.body;
 
     const projectFields = { title, description, date };
 
     if (images) projectFields.images = images;
     if (links) projectFields.links = links;
+    if (videos) projectFields.videos = videos;
 
     try {
       //find project - if project already exists then update it with the new fields
@@ -106,11 +107,15 @@ router.delete('/:id', auth, async (req, res) => {
     let response = await Project.findOneAndRemove({ _id: req.params.id });
     //remove images from cloudinary
     let public_idArray = [];
-    if (response.images.length > 0) {
+    if (response.images.length > 0 || response.videos.length > 0) {
       let images = response.images;
+      let videos = response.videos;
       const makeArray = () => {
         for (var i = 0; i < images.length; i++) {
           public_idArray.push(images[i].id);
+        }
+        for (var i = 0; i < videos.length; i++) {
+          public_idArray.push(videos[i].id);
         }
       };
       await makeArray();
