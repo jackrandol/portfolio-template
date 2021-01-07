@@ -17,6 +17,13 @@ const ProjectSchema = new mongoose.Schema({
       url: { type: String, required: false },
     },
   ],
+  videos: [
+    {
+      id: { type: String, required: false },
+      fileName: { type: String, required: false },
+      url: { type: String, required: false },
+    },
+  ],
   links: [
     {
       id: { type: String, required: false },
