@@ -15,6 +15,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 import { loadUser } from './actions/auth';
 import { loadProjects } from './actions/projects';
+import { loadAbout } from './actions/about';
 import setAuthToken from './utils/setAuthToken';
 
 if (localStorage.token) {
@@ -29,6 +30,10 @@ const App = () => {
   useEffect(() => {
     store.dispatch(loadProjects());
   }, []);
+
+  useEffect(() => {
+    store.dispatch(loadAbout());
+  });
 
   return (
     <Provider store={store}>

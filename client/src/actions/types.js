@@ -15,3 +15,6 @@ export const ADD_PROJECT = 'ADD_PROJECT';
 export const DELETE_PROJECT = 'DELETE_PROJECT';
 export const LOAD_BIO = 'LOAD_BIO';
 export const ABOUT_ERROR = 'ABOUT_ERROR';
+export const ADD_ABOUT = 'ADD_ABOUT';
+export const UPDATE_ABOUT = 'UPDATE_ABOUT';
+export const UPDATE_ABOUT_IMAGE = 'UPDATE_ABOUT_IMAGE';

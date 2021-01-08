@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import './PhotoUpload.css';
 import { ReactComponent as LoaderSvg } from '../assets/loader.svg';
 
