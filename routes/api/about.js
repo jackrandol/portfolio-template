@@ -15,11 +15,9 @@ router.post(
     }
 
     //build profile object
-    const { _id, bio, image } = req.body;
+    const { _id, bio } = req.body;
 
-    const aboutFields = { bio, image };
-
-    if (image) aboutFields.image = image;
+    const aboutFields = { bio };
 
     try {
       //find project - if project already exists then update it with the new fields
