@@ -18,14 +18,20 @@ function Projects(state) {
 
   const [projectFormVisible, toggleProjectFormVisible] = useState(false);
   const [selectedProject, setSelectedProject] = useState({});
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   const toggleProjectForm = (project) => {
     toggleProjectFormVisible(!projectFormVisible);
     setSelectedProject(project);
   };
 
-  const handleDelete = (projectId) => {
+  const toggleDeleteModal = () => {
+    setDeleteModalVisible(!deleteModalVisible);
+  };
+
+  const handleDeleteConfirm = (projectId) => {
     dispatch(deleteProject(projectId));
+    toggleDeleteModal();
   };
 
   return (
@@ -51,7 +57,24 @@ function Projects(state) {
           <div key={project._id} className='projectCard'>
             {auth && (
               <div>
-                <button onClick={() => handleDelete(project._id)}>X</button>
+                <button onClick={toggleDeleteModal}>X</button>
+                {deleteModalVisible && (
+                  <div className='deleteModal'>
+                    <h3>
+                      Are you sure you want to delete this project forever?
+                    </h3>
+                    <p>
+                      This will remove the project from your records and any
+                      photos and videos from the database.
+                    </p>
+                    <h2>Project to be deleted:</h2>
+                    <p>{project.title}</p>
+                    <button onClick={() => handleDeleteConfirm(project._id)}>
+                      delete forever
+                    </button>
+                    <button onClick={toggleDeleteModal}>cancel</button>
+                  </div>
+                )}
                 <button onClick={() => toggleProjectForm(project)}>Edit</button>
               </div>
             )}

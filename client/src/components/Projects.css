@@ -15,3 +15,17 @@
   flex-direction: row;
   justify-content: space-between;
 }
+
+.deleteModal {
+  position: fixed;
+  top: 10vh;
+  left: 25vh;
+  width: 500px;
+  max-height: 85vh;
+  overflow: scroll;
+  background-color: red;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  z-index: 11;
+}

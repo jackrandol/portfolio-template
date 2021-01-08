@@ -67,8 +67,8 @@ function VideoUpload({ handleVideoUrls }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!selectedFile || selectedFile.size >= 4 * 1024 * 1024) {
-      setMessage('File is larger than 4mb or there is no file selected');
+    if (!selectedFile || selectedFile.size >= 20 * 1024 * 1024) {
+      setMessage('File is larger than 20mb or there is no file selected');
       return;
     }
     uploadVideo();
